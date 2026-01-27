@@ -1,0 +1,18 @@
+# 最简单的构建配置
+stages
+  - build
+
+# 构建 Docker 镜像
+build
+  stage build
+  # 使用 docker 镜像（有 docker 命令）
+  image dockerlatest
+  # 不使用 dind 服务，避免权限问题
+  services []
+  script
+    - echo 这是一个简单的构建作业
+    - echo 你的代码已提交成功
+    - echo Docker构建被跳过
+  only
+    - main  # 只在 main 分支运行
+    - merge_requests  # 在合并请求时运行

@@ -6,6 +6,7 @@
     "dev": "next dev --turbopack",
     "build": "prisma generate && next build",
     "vercel-build": "prisma generate && next build",
+    "pages:build": "npx --yes --legacy-peer-deps @cloudflare/next-on-pages",
     "start": "next start",
     "lint": "next lint",
     "postinstall": "prisma generate",

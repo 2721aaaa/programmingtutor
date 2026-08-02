@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Editor } from "@monaco-editor/react";
-import type * as monaco from "monaco-editor";
 import { Play, Send } from "lucide-react";
 import { Button } from "@/app/_components/ui/button";
 import { useDebounce } from "@uidotdev/usehooks";
@@ -29,6 +28,18 @@ interface CodeEditorProps {
   disableCopyPaste: boolean;
 }
 
+type EditorKeyEvent = {
+  keyCode: number;
+  ctrlKey: boolean;
+  metaKey: boolean;
+  preventDefault: () => void;
+};
+
+type MinimalMonacoEditor = {
+  focus: () => void;
+  onKeyDown: (listener: (event: EditorKeyEvent) => void) => void;
+};
+
 export function CodeEditor({
   code,
   onChange,
@@ -38,7 +49,7 @@ export function CodeEditor({
   isRunning,
   disableCopyPaste,
 }: CodeEditorProps) {
-  const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
+  const editorRef = useRef<MinimalMonacoEditor | null>(null);
   const codeRef = useRef<string>(code);
   const { theme } = useTheme();
   const [liveCode, setLiveCode] = useState(code);
@@ -57,10 +68,7 @@ export function CodeEditor({
     setLiveCode(updatedCode);
   };
 
-  const onMount = (
-    editor: monaco.editor.IStandaloneCodeEditor,
-    monaco: typeof import("monaco-editor"),
-  ) => {
+  const onMount = (editor: MinimalMonacoEditor) => {
     editorRef.current = editor;
     editor.focus();
 
